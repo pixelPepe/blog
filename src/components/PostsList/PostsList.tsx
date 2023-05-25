@@ -1,31 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PostListsI } from './PostsListProps';
-import axios from 'axios';
 import { Post } from 'components';
 import { Container } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPostsRequest } from 'store/actions';
 
 export const PostsList: React.FC<PostListsI> = () => {
-  const [posts, setPosts] = useState([]);
+  const dispatch = useDispatch();
+  const posts = useSelector((state: any) => state.posts.posts);
+  // const loading = useSelector((state: any) => state.posts.loading);
+  // const error = useSelector((state: any) => state.posts.error);
 
   useEffect(() => {
-    axios
-      .get('https://jsonplaceholder.typicode.com/posts')
-      .then(function (response) {
-        setPosts(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    axios
-      .get('https://jsonplaceholder.typicode.com/users/1/posts')
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+    dispatch(fetchPostsRequest());
+  }, [dispatch]);
 
   return (
     <Container>

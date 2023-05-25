@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { UserPropsI } from './UserProps';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Header, Post } from 'components';
-import { Card, Container } from 'react-bootstrap';
+import { Button, Card, Container } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPostsRequest, fetchUserRequest } from 'store/actions';
+import styles from './User.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface UserI {
   name: string;
@@ -13,39 +16,36 @@ interface UserI {
 }
 
 export const User: React.FC<UserPropsI> = () => {
+  const navigate = useNavigate();
+
   const params = useParams();
   const { id } = params;
-  const [user, setUser] = useState<UserI>();
-  const [posts, setPosts] = useState([]);
+
+  const dispatch = useDispatch();
+  const user: UserI = useSelector((state: any) => state.user.user);
+
+  const posts = useSelector((state: any) => state.posts.posts);
 
   useEffect(() => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/users/${id}`)
-      .then(function (response) {
-        setUser(response.data);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    axios
-      .get(`https://jsonplaceholder.typicode.com/users/${id}/posts`)
-      .then(function (response) {
-        setPosts(response.data);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+    dispatch(fetchUserRequest(+id!));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    dispatch(fetchPostsRequest());
+  }, [dispatch]);
   return (
     <>
       <Header />
       <Container>
         {user && (
-          <Card>
+          <Card className="mt-2">
             <Card.Body>
-              <Card.Title>{user.name}</Card.Title>
+              <div className={styles.row}>
+                <Card.Title>{user.name}</Card.Title>
+                <Button onClick={() => navigate(-1)} variant="primary">
+                  Назад
+                </Button>{' '}
+              </div>
               <Card.Subtitle className="mb-2 text-muted">
                 {user.username}
               </Card.Subtitle>
