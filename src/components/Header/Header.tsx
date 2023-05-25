@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderPropsI> = () => {
         <button className={styles.burgerBtn} onClick={handleShow}>
           <span className={cn(show ? styles.active : null)}></span>
         </button>
-        <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas show={show} onHide={handleClose} style={{ width: '200px' }}>
           <Offcanvas.Header>
             <Offcanvas.Title>Меню</Offcanvas.Title>
           </Offcanvas.Header>
