@@ -1,6 +1,5 @@
 import React from 'react';
 import { CommentsListPropsI } from './CommentsListProps';
-// import styles from './CommentsList.module.scss';
 import { Card, ListGroup } from 'react-bootstrap';
 import { Comment } from 'components';
 
